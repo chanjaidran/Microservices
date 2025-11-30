@@ -18,6 +18,11 @@ public class AccountController {
 
     private final AccountService accountService;
 
+    private String helloWorld()
+    {
+        return "Hemmlo";
+    }
+
     @PostMapping("/{customerId}")
     public ResponseEntity<Account> createAccount(
             @PathVariable Long customerId,
