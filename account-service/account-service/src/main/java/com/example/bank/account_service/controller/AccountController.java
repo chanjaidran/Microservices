@@ -23,6 +23,11 @@ public class AccountController {
         return "Hemmlo";
     }
 
+    private String rebaseHello()
+    {
+        return "Hemmlo";
+    }
+
     @PostMapping("/{customerId}")
     public ResponseEntity<Account> createAccount(
             @PathVariable Long customerId,
