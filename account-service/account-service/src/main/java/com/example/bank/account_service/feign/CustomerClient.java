@@ -13,5 +13,11 @@ public interface CustomerClient {
     @GetMapping("/api/customers/{id}")
     CustomerResponse getCustomerById(@PathVariable Long id);
 
+    //for mergecheck
+    @GetMapping("/api/customers/{id}")
+    CustomerResponse getCustomerBd(@PathVariable Long id);
+    @GetMapping("/api/customers/{id}")
+    CustomerResponse getCustomerByI(@PathVariable Long id);
+
 
 }

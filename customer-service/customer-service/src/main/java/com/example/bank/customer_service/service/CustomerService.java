@@ -5,10 +5,12 @@ import com.example.bank.customer_service.dto.CustomerResponseDto;
 import com.example.bank.customer_service.entity.Customer;
 import com.example.bank.customer_service.feign.AccountClient;
 import com.example.bank.customer_service.repository.CustomerRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -57,6 +59,7 @@ public class CustomerService {
     }
 
 
+    @CircuitBreaker(name = "accountService", fallbackMethod = "getCustomersAccountsFallback")
     public CustomerResponseDto getCustomersAccounts(Long id)
     {
         Customer customer=getCustomer(id);
@@ -67,6 +70,18 @@ public class CustomerService {
         return  customerResponseDto;
     }
 
+
+    // ---------- FALLBACK (must match arguments + Throwable) ----------
+    public CustomerResponseDto getCustomersAccountsFallback(Long id, Throwable t) {
+        System.out.println("Fallback triggered for /getCustomersAccounts : " + t.getMessage());
+
+        Customer customer = getCustomer(id); // Customer can still be returned
+
+        CustomerResponseDto dto = new CustomerResponseDto();
+        dto.setCustomer(customer);
+        dto.setAccountDtoResponses(Collections.emptyList()); // accounts unavailable
+        return dto;
+    }
 
 
 
